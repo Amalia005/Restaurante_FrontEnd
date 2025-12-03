@@ -1,24 +1,12 @@
 import { Outlet } from "react-router-dom";
-import useWindowDimensions from "../../scripts/useWindowDimensions";
-import HeaderGPI from "./menuHeader/HeaderGPI";
 
-function MainLayout() {
-  const { width } = useWindowDimensions();
+const MainLayout = () => {
   return (
-    <>
-      <div className="flex flex-1 w-full max-h-screen">
-        <div className="flex flex-1 flex-col overflow-hidden lg:flex-row max-h-screen">
-          {width > 1024 ? <HeaderGPI /> : <HeaderGPI isMobile />}
-
-          <main className="flex-1 overflow-y-auto">
-            <div className="flex-1 px-6 py-8 overflow-y-auto w-full max-h-screen  h-full">
-              {<Outlet />}
-            </div>
-          </main>
-        </div>
-      </div>
-    </>
+    <div className="min-h-screen bg-slate-50">
+      {/* Aquí se renderiza la página que corresponda a la ruta (Home en tu caso) */}
+      <Outlet />
+    </div>
   );
-}
+};
 
 export default MainLayout;
