@@ -128,15 +128,29 @@ export default function AppMenu() {
                 className="mb-8"
               >
                 <h2 className="text-orange-800 mb-4 px-2">{section}</h2>
-                <div className="space-y-2">
-                  {dishes.map((dish) => (
-                    <MenuItem
-                      key={dish.id}
-                      dish={dish}
-                      onClick={() => setSelectedDish(dish)}
-                    />
-                  ))}
-                </div>
+
+{/* 
+  Mobile   -> 1 columna (lista vertical)
+  md (tablet) -> 2 columnas
+  lg (PC)  -> 3 columnas
+*/}
+<div className="
+  space-y-2
+  md:space-y-0
+  md:grid md:grid-cols-2
+  lg:grid-cols-3
+  md:gap-4
+  lg:gap-6
+">
+  {dishes.map((dish) => (
+    <MenuItem
+      key={dish.id}
+      dish={dish}
+      onClick={() => setSelectedDish(dish)}
+    />
+  ))}
+</div>
+
               </div>
             );
           })}
