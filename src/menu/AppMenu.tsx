@@ -6,8 +6,10 @@ import { DishModal } from "./components/DishModal";
 import { FloatingCartButton } from "./components/FloatingCartButton";
 import { CartPanel } from "./components/CartPanel";
 import { NoteModal } from "./components/NoteModal";
-import { menuData } from "./data/menuData";
+// import { menuData } from "./data/menuData";
 import type { Dish, CartItem } from "./types/menu";
+
+const API_URL = "http://localhost:3000/api";
 
 export default function AppMenu() {
   const [headerVisible, setHeaderVisible] = useState(true);
@@ -17,11 +19,17 @@ export default function AppMenu() {
   const [showCart, setShowCart] = useState(false);
   const [noteModalDishId, setNoteModalDishId] = useState<string | null>(null);
 
+  // 🔽 nuevo: platos desde el backend
+  const [allDishes, setAllDishes] = useState<Dish[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const lastScrollY = useRef(0);
   const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   const sections = ["Menús del día", "Platos de fondo", "Agregados", "Bebestibles"];
 
+  // --- efecto para esconder/mostrar header según scroll ---
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -50,6 +58,31 @@ export default function AppMenu() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // --- efecto para cargar platos desde el backend ---
+  useEffect(() => {
+    const fetchDishes = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const res = await fetch(`${API_URL}/dishes`);
+        if (!res.ok) {
+          throw new Error("Error al cargar el menú");
+        }
+
+        const data: Dish[] = await res.json();
+        setAllDishes(data);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message ?? "Error al cargar el menú");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDishes();
   }, []);
 
   const scrollToSection = (section: string) => {
@@ -104,11 +137,10 @@ export default function AppMenu() {
     (item) => item.dish.id === noteModalDishId
   );
 
-   return (
+  return (
     <div className="min-h-screen bg-orange-50 flex justify-center">
       {/* Contenedor tipo “celular” centrado en pantallas grandes */}
-      <div className="w-full text-xs md:text-sm max-w-lg md:max-w-4xl lg:max-w-7xl
-        bg-orange-50">
+      <div className="w-full text-xs md:text-sm max-w-lg md:max-w-4xl lg:max-w-7xl bg-orange-50">
         <MenuHeader isVisible={headerVisible} />
 
         <SectionBar
@@ -119,42 +151,63 @@ export default function AppMenu() {
         />
 
         <main className="pt-[140px] pb-24 px-4">
-          {sections.map((section) => {
-            const dishes = menuData.filter((dish) => dish.category === section);
+          {loading && (
+            <p className="text-center text-orange-700">
+              Cargando menú...
+            </p>
+          )}
 
-            return (
-              <div
-                key={section}
-                ref={(el) => (sectionRefs.current[section] = el)}
-                className="mb-8"
-              >
-                <h2 className="text-orange-800 mb-4 px-2">{section}</h2>
+          {error && (
+            <p className="text-center text-red-600 mb-4">
+              {error}
+            </p>
+          )}
 
-{/* 
-  Mobile   -> 1 columna (lista vertical)
-  md (tablet) -> 2 columnas
-  lg (PC)  -> 3 columnas
-*/}
-<div className="
-  space-y-2
-  md:space-y-0
-  md:grid md:grid-cols-2
-  lg:grid-cols-3
-  md:gap-4
-  lg:gap-6
-">
-  {dishes.map((dish) => (
-    <MenuItem
-      key={dish.id}
-      dish={dish}
-      onClick={() => setSelectedDish(dish)}
-    />
-  ))}
-</div>
+          {!loading && !error && (
+            <>
+              {sections.map((section) => {
+                const dishes = allDishes.filter(
+                  (dish) => dish.category === section
+                );
 
-              </div>
-            );
-          })}
+                return (
+                  <div
+                    key={section}
+                    ref={(el) => {
+  sectionRefs.current[section] = el;
+}}
+                    className="mb-8"
+                  >
+                    <h2 className="text-orange-800 mb-4 px-2">{section}</h2>
+
+                    {/* 
+                      Mobile   -> 1 columna (lista vertical)
+                      md (tablet) -> 2 columnas
+                      lg (PC)  -> 3 columnas
+                    */}
+                    <div
+                      className="
+                        space-y-2
+                        md:space-y-0
+                        md:grid md:grid-cols-2
+                        lg:grid-cols-3
+                        md:gap-4
+                        lg:gap-6
+                      "
+                    >
+                      {dishes.map((dish) => (
+                        <MenuItem
+                          key={dish.id}
+                          dish={dish}
+                          onClick={() => setSelectedDish(dish)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </>
+          )}
         </main>
 
         <FloatingCartButton
@@ -192,4 +245,3 @@ export default function AppMenu() {
     </div>
   );
 }
-
