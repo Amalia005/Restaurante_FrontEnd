@@ -107,7 +107,8 @@ export default function AppMenu() {
    return (
     <div className="min-h-screen bg-orange-50 flex justify-center">
       {/* Contenedor tipo “celular” centrado en pantallas grandes */}
-      <div className="w-full max-w-md md:max-w-lg lg:max-w-xl bg-orange-50">
+      <div className="w-full max-w-md md:max-w-2xl lg:max-w-4xl
+        bg-orange-50">
         <MenuHeader isVisible={headerVisible} />
 
         <SectionBar
