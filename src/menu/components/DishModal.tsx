@@ -56,7 +56,8 @@ export function DishModal({ dish, onClose, onAdd }: DishModalProps) {
         <div className="p-4 border-t border-orange-100">
           <button
             onClick={handleConfirm}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl transition-colors"
+            className="w-full text-white py-3 rounded-xl transition-colors"
+            style={{ backgroundColor: "#f97316" }} // mismo naranja que el carrito
           >
             Agregar al pedido
           </button>
@@ -65,3 +66,4 @@ export function DishModal({ dish, onClose, onAdd }: DishModalProps) {
     </div>
   );
 }
+
