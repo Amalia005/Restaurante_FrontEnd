@@ -94,7 +94,8 @@ export function CartPanel({
             </div>
             <button
               onClick={onCheckout}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-xl transition-colors"
+              className="w-full text-white py-4 rounded-xl transition-colors"
+              style={{ backgroundColor: "#f97316" }} // naranja fuerte
             >
               Pagar pedido
             </button>
