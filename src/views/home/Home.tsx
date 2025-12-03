@@ -1,7 +1,7 @@
-import React from 'react'
+import AppMenu from "../../menu/AppMenu";
 
 function Home() {
-  return <div className="flex flex-col h-full lg:pt-14 flex-1">Home</div>;
+  return <AppMenu />;
 }
 
-export default Home
+export default Home;
