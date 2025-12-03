@@ -1,3 +1,19 @@
+
+# Sistema de gestión de pedidos – Front End
+
+Front end del prototipo funcional para la Evaluación 3 de Metodología de Análisis.
+
+Este proyecto implementa la historia de usuario **HU-01: Cliente realiza pedido desde el menú**.
+
+## Ejecutar en local
+
+```bash
+git clone https://github.com/Amalia005/Restaurante_FrontEnd.git
+cd Restaurante_FrontEnd
+npm install
+npm run dev
+```
+
 # GPI Template - Universidad de Valparaíso
 
 Template web para la asignatura de Gestión de Proyecto Informático (GPI) de la Universidad de Valparaíso. Este proyecto proporciona una base robusta para desarrollar aplicaciones web modernas con React, TypeScript y otras tecnologías actuales.
