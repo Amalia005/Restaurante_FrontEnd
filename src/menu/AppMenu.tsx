@@ -104,73 +104,77 @@ export default function AppMenu() {
     (item) => item.dish.id === noteModalDishId
   );
 
-  return (
-    <div className="min-h-screen bg-orange-50">
-      <MenuHeader isVisible={headerVisible} />
+   return (
+    <div className="min-h-screen bg-orange-50 flex justify-center">
+      {/* Contenedor tipo “celular” centrado en pantallas grandes */}
+      <div className="w-full max-w-md md:max-w-lg lg:max-w-xl bg-orange-50">
+        <MenuHeader isVisible={headerVisible} />
 
-      <SectionBar
-        sections={sections}
-        activeSection={activeSection}
-        onSectionClick={scrollToSection}
-        isVisible={headerVisible}
-      />
+        <SectionBar
+          sections={sections}
+          activeSection={activeSection}
+          onSectionClick={scrollToSection}
+          isVisible={headerVisible}
+        />
 
-      <main className="pt-[140px] pb-24 px-4">
-        {sections.map((section) => {
-          const dishes = menuData.filter((dish) => dish.category === section);
+        <main className="pt-[140px] pb-24 px-4">
+          {sections.map((section) => {
+            const dishes = menuData.filter((dish) => dish.category === section);
 
-          return (
-            <div
-              key={section}
-              ref={(el) => (sectionRefs.current[section] = el)}
-              className="mb-8"
-            >
-              <h2 className="text-orange-800 mb-4 px-2">{section}</h2>
-              <div className="space-y-2">
-                {dishes.map((dish) => (
-                  <MenuItem
-                    key={dish.id}
-                    dish={dish}
-                    onClick={() => setSelectedDish(dish)}
-                  />
-                ))}
+            return (
+              <div
+                key={section}
+                ref={(el) => (sectionRefs.current[section] = el)}
+                className="mb-8"
+              >
+                <h2 className="text-orange-800 mb-4 px-2">{section}</h2>
+                <div className="space-y-2">
+                  {dishes.map((dish) => (
+                    <MenuItem
+                      key={dish.id}
+                      dish={dish}
+                      onClick={() => setSelectedDish(dish)}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </main>
+            );
+          })}
+        </main>
 
-      <FloatingCartButton
-        itemCount={totalItems}
-        onClick={() => setShowCart(true)}
-      />
-
-      {selectedDish && (
-        <DishModal
-          dish={selectedDish}
-          onClose={() => setSelectedDish(null)}
-          onAdd={(quantity) => handleAddToCart(selectedDish, quantity)}
+        <FloatingCartButton
+          itemCount={totalItems}
+          onClick={() => setShowCart(true)}
         />
-      )}
 
-      {showCart && (
-        <CartPanel
-          cartItems={cartItems}
-          onClose={() => setShowCart(false)}
-          onRemoveItem={handleRemoveItem}
-          onAddNote={handleAddNote}
-          onCheckout={handleCheckout}
-        />
-      )}
+        {selectedDish && (
+          <DishModal
+            dish={selectedDish}
+            onClose={() => setSelectedDish(null)}
+            onAdd={(quantity) => handleAddToCart(selectedDish, quantity)}
+          />
+        )}
 
-      {noteModalDishId && noteModalItem && (
-        <NoteModal
-          currentNote={noteModalItem.note || ""}
-          dishName={noteModalItem.dish.name}
-          onClose={() => setNoteModalDishId(null)}
-          onSave={handleSaveNote}
-        />
-      )}
+        {showCart && (
+          <CartPanel
+            cartItems={cartItems}
+            onClose={() => setShowCart(false)}
+            onRemoveItem={handleRemoveItem}
+            onAddNote={handleAddNote}
+            onCheckout={handleCheckout}
+          />
+        )}
+
+        {noteModalDishId && noteModalItem && (
+          <NoteModal
+            currentNote={noteModalItem.note || ""}
+            dishName={noteModalItem.dish.name}
+            onClose={() => setNoteModalDishId(null)}
+            onSave={handleSaveNote}
+          />
+        )}
+      </div>
     </div>
   );
 }
+
