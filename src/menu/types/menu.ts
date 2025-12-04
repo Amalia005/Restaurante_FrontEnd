@@ -3,9 +3,11 @@ export interface Dish {
   name: string;
   price: number;
   category: string;
-  image: string;
-  description: string;
+  image?: string;        // opcional
+  description?: string;  // opcional
   ingredients: string[];
+  // opcionalmente, si quieres guardar el id original:
+  _id?: string;
 }
 
 export interface CartItem {
