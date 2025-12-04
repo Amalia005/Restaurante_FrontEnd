@@ -13,7 +13,7 @@ export function MenuHeader({ isVisible }: MenuHeaderProps) {
     >
       <div className="mx-auto w-full
           max-w-lg md:max-w-4xl lg:max-w-7xl
-          flex items-center justify-between px-4 py-3">
+          flex items-center justify-between px-4 py-1">
         <h1 className="text-orange-700">Donde la Vita</h1>
         <button className="p-2 hover:bg-orange-50 rounded-full transition-colors">
           <MoreVertical className="w-5 h-5 text-orange-700" />
