@@ -61,29 +61,36 @@ export default function AppMenu() {
   }, []);
 
   // --- efecto para cargar platos desde el backend ---
-  useEffect(() => {
-    const fetchDishes = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+useEffect(() => {
+  const fetchDishes = async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-        const res = await fetch(`${API_URL}/dishes`);
-        if (!res.ok) {
-          throw new Error("Error al cargar el menú");
-        }
-
-        const data: Dish[] = await res.json();
-        setAllDishes(data);
-      } catch (err: any) {
-        console.error(err);
-        setError(err.message ?? "Error al cargar el menú");
-      } finally {
-        setLoading(false);
+      const res = await fetch(`${API_URL}/dishes`);
+      if (!res.ok) {
+        throw new Error("Error al cargar el menú");
       }
-    };
 
-    fetchDishes();
-  }, []);
+      const raw = await res.json();
+
+      // 🔴 AQUÍ: mapear _id -> id
+      const data: Dish[] = raw.map((dish: any) => ({
+        ...dish,
+        id: dish.id ?? dish._id,   // si no viene id, usa _id
+      }));
+
+      setAllDishes(data);
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message ?? "Error al cargar el menú");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchDishes();
+}, []);
 
   const scrollToSection = (section: string) => {
     const ref = sectionRefs.current[section];
